@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAYRE | Private Guest Dashboard</title>
+<style>
+:root{--cream:#f7f2e8;--gold:#a98649;--ink:#493b2d;--line:#e4d9c7}*{box-sizing:border-box}body{font:15px system-ui,sans-serif;background:var(--cream);color:var(--ink);margin:0;padding:20px}main{max-width:950px;margin:auto}h1{font:normal clamp(32px,6vw,48px) Georgia,serif;color:#99743b;margin-bottom:6px}h2{font:normal 26px Georgia,serif}input,button,select{padding:12px;margin:6px 0;border:1px solid #c8b38b;border-radius:4px;font:inherit;max-width:100%}input,select{background:white;color:var(--ink)}button{background:var(--gold);color:white;cursor:pointer}button:disabled{opacity:.5}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #477a59;outline-offset:2px}section{background:white;padding:clamp(14px,4vw,24px);margin:20px 0;border:1px solid var(--line);border-radius:8px}.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button{margin:0}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.stats>div{background:var(--cream);padding:16px;min-width:0}.stats strong{display:block;font-size:30px;margin-top:8px}.filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(150px,1fr);gap:12px;align-items:end;margin:22px 0 8px}.filters label{display:block;font-size:13px;font-weight:600}.filters input,.filters select{width:100%;margin-top:7px}.summary{font-size:13px;color:#6e6051;margin:10px 0}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:620px}td,th{border-bottom:1px solid #ddd;padding:11px 10px;text-align:left;vertical-align:top}th{background:#faf7f0}td{overflow-wrap:anywhere}#app{display:none}#status{white-space:pre-wrap;min-height:24px}#loginForm{display:flex;flex-wrap:wrap;gap:8px}#loginForm input{flex:1 1 200px}#loginForm button{flex:0 0 auto}#empty{text-align:center;color:#786d60;padding:20px}@media(max-width:560px){.stats{grid-template-columns:1fr}.filters{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<h1>RAYRE Guest Dashboard</h1><p>Private management · Jeremy &amp; Marjorie</p>
+<section id="login"><h2>Admin sign in</h2><form id="loginForm"><input type="email" id="email" placeholder="Admin email" aria-label="Admin email" required autocomplete="username"><input type="password" id="password" placeholder="Password" aria-label="Password" required autocomplete="current-password"><button type="submit">Sign in</button></form></section>
+<section id="app">
+<div class="actions"><button id="refresh" type="button">Refresh</button><button id="export" type="button">Export CSV</button><button id="logout" type="button">Sign out</button></div>
+<div class="stats"><div>Confirmed RSVPs<strong id="yes">0</strong></div><div>Declined RSVPs<strong id="no">0</strong></div><div>Total attending<strong id="total">0</strong></div></div>
+<div class="filters"><div><label for="search">Search guest</label><input id="search" type="search" placeholder="Type a guest name..." autocomplete="off"></div><div><label for="filter">RSVP status</label><select id="filter"><option value="all">All responses</option><option value="Yes">Confirmed</option><option value="No">Declined</option></select></div></div>
+<p id="shown" class="summary" aria-live="polite"></p>
+<div class="scroll"><table><thead><tr><th>Name</th><th>Response</th><th>Guests</th><th>Message</th><th>Submitted</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p id="empty" hidden>No matching guests found.</p>
+</section><p id="status" role="status" aria-live="polite"></p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script>
+'use strict';
+const cfg=window.RAYRE_CONFIG||{};
+const db=cfg.url&&cfg.anonKey&&window.supabase?window.supabase.createClient(cfg.url,cfg.anonKey):null;
+const $=id=>document.getElementById(id);
+let entries=[];
+function csvSafe(v){let s=String(v??'');if(/^[=+\-@\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
+function filteredEntries(){const term=$('search').value.trim().toLocaleLowerCase();const choice=$('filter').value;return entries.filter(e=>(choice==='all'||e.attendance===choice)&&String(e.name??'').toLocaleLowerCase().includes(term))}
+function render(){
+ const list=filteredEntries();$('rows').replaceChildren();
+ for(const e of list){const tr=document.createElement('tr');const date=e.created_at?new Date(e.created_at).toLocaleString('en-PH',{timeZone:'Asia/Manila'}):'';for(const val of [e.name,e.attendance,e.guest_count,e.message,date]){const td=document.createElement('td');td.textContent=String(val??'');tr.appendChild(td)}$('rows').appendChild(tr)}
+ $('shown').textContent=`Showing ${list.length} of ${entries.length} RSVP responses`;
+ $('empty').hidden=list.length!==0;
+}
+async function refresh(){
+ if(!db)return;
+ $('status').textContent='Loading guest list...';
+ const {data,error}=await db.from('rsvps').select('name,attendance,guest_count,message,created_at').eq('event_slug','jeremy-maria').order('created_at',{ascending:false});
+ if(error){$('status').textContent='Cannot read guest list. Check admin access policies.';return}
+ entries=data||[];
+ $('yes').textContent=entries.filter(x=>x.attendance==='Yes').length;
+ $('no').textContent=entries.filter(x=>x.attendance==='No').length;
+ $('total').textContent=entries.reduce((a,x)=>a+(x.attendance==='Yes'?Number(x.guest_count)||0:0),0);
+ render();$('status').textContent=entries.length+' responses loaded.';
+}
+async function update(){
+ if(!db){$('status').textContent='Configure config.js first.';return}
+ const {data:{user},error:userError}=await db.auth.getUser();
+ if(userError||!user){$('login').style.display='block';$('app').style.display='none';return}
+ const {data,error}=await db.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
+ if(error||!data){$('status').textContent='This account is not authorized as an admin.';$('app').style.display='none';$('login').style.display='block';return}
+ $('login').style.display='none';$('app').style.display='block';await refresh();
+}
+$('loginForm').addEventListener('submit',async e=>{
+ e.preventDefault();if(!db){$('status').textContent='Configure config.js first.';return}
+ const {error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});
+ if(error){$('status').textContent='Sign in failed. Check your credentials.';return}
+ $('password').value='';await update();
+});
+$('search').addEventListener('input',render);
+$('filter').addEventListener('change',render);
+$('refresh').addEventListener('click',refresh);
+$('logout').addEventListener('click',async()=>{if(db)await db.auth.signOut();entries=[];$('search').value='';$('filter').value='all';$('status').textContent='Signed out.';await update()});
+$('export').addEventListener('click',()=>{
+ const cols=['name','attendance','guest_count','message','created_at'];
+ const content=[cols.join(','),...filteredEntries().map(e=>cols.map(k=>csvSafe(e[k])).join(','))].join('\r\n');
+ const u=URL.createObjectURL(new Blob(['\ufeff'+content],{type:'text/csv;charset=utf-8'}));
+ const a=document.createElement('a');a.href=u;a.download='jeremy-marjorie-rsvps.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);
+});
+update();
+</script></body></html>
