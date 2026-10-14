@@ -62,5 +62,37 @@ musicButton.addEventListener('click',async()=>{
   }
 });
 audio.preload='auto';audio.loop=true;audio.volume=.35;
-const lightbox=document.getElementById('lightbox');document.querySelectorAll('#gallery img').forEach(img=>img.addEventListener('click',()=>{document.getElementById('lightboxImage').src=img.src;lightbox.classList.add('open')}));function closeLightbox(){lightbox.classList.remove('open')}document.getElementById('closeLightbox').addEventListener('click',closeLightbox);lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
+
+let autoScrollTimer = null;
+
+function startAutoScroll() {
+  if (autoScrollTimer) return;
+
+  autoScrollTimer = setInterval(() => {
+    const bottom = document.documentElement.scrollHeight - window.innerHeight;
+
+    if (window.scrollY >= bottom - 2) {
+      stopAutoScroll();
+      return;
+    }
+
+    window.scrollBy({
+      top: 1,
+      behavior: 'instant'
+    });
+  }, 35);
+}
+
+function stopAutoScroll() {
+  clearInterval(autoScrollTimer);
+  autoScrollTimer = null;
+}
+
+document.getElementById('openInvitation').addEventListener('click', () => {
+  setTimeout(startAutoScroll, 2200);
+});
+
+window.addEventListener('wheel', stopAutoScroll, { passive: true });
+window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+document.querySelectorAll('#gallery img').forEach(img=>img.addEventListener('click',()=>{document.getElementById('lightboxImage').src=img.src;lightbox.classList.add('open')}));function closeLightbox(){lightbox.classList.remove('open')}document.getElementById('closeLightbox').addEventListener('click',closeLightbox);lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
 </script></body></html>
