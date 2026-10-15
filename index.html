@@ -25,6 +25,108 @@
 @media(max-width:680px){.hero{min-height:100svh;padding:110px 20px 65px;background-position:center,47% center}.hero-content{max-width:380px}.hero h1{font-size:clamp(60px,14.2vw,82px);line-height:.88}.hero .date{font-size:10px;letter-spacing:1.2px}.hero .eyebrow{font-size:9px;letter-spacing:2px}.hero-content>p{font-size:12px;letter-spacing:1.4px!important}.site-header{align-items:flex-start}.brand{max-width:155px;line-height:1.6}.music{font-size:9px;padding:9px 10px;letter-spacing:1px}.gallery img,.gallery img:nth-child(4n+2){height:clamp(170px,52vw,245px)}.section{padding:74px 20px}.section h2{font-size:clamp(47px,12vw,64px)}.rsvp-form{padding:25px 20px}}
 @media(max-width:360px){.hero h1{font-size:55px}.hero .date{letter-spacing:.5px}}
 </style></head><body>
+<style>
+#fireworksCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 200;
+}
+</style>
+
+<canvas id="fireworksCanvas" aria-hidden="true"></canvas>
+
+<script>
+(() => {
+  const canvas = document.getElementById('fireworksCanvas');
+  const ctx = canvas.getContext('2d');
+  const colors = ['#D4AF37', '#F8E7B9', '#FFFFFF', '#E8CFA0'];
+  let particles = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function burst(x, y) {
+    for (let i = 0; i < 65; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 1.5 + Math.random() * 4;
+
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 75,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+  }
+
+  let animating = false;
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles = particles.filter(p => p.life > 0);
+
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.025;
+      p.life--;
+
+      ctx.globalAlpha = p.life / 75;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+
+    if (particles.length) {
+      requestAnimationFrame(animate);
+    } else {
+      animating = false;
+    }
+  }
+
+  function launchFireworks() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const positions = [
+      [0.25, 0.3],
+      [0.75, 0.25],
+      [0.5, 0.4],
+      [0.3, 0.55],
+      [0.7, 0.5]
+    ];
+
+    positions.forEach(([x, y], i) => {
+      setTimeout(() => {
+        burst(canvas.width * x, canvas.height * y);
+
+        if (!animating) {
+          animating = true;
+          animate();
+        }
+      }, i * 350);
+    });
+  }
+
+  document.getElementById('openInvitation')
+    .addEventListener('click', () => {
+      setTimeout(launchFireworks, 900);
+    });
+})();
+</script>
+
 <div id="opening" role="dialog" aria-modal="true" aria-label="Open wedding invitation"><div class="open-inner"><div class="eyebrow">You are cordially invited</div><h2>To a celebration of love</h2><div class="envelope" id="envelope" aria-hidden="true"><div class="env-back"></div><div class="env-letter"><div>J <span style="color:#b49b6c">&</span> M<small>27 · 02 · 2027</small></div></div><div class="env-front"></div><div class="env-flap"></div><div class="wax">❦</div></div><button id="openInvitation" type="button">Open Invitation ✧</button><p class="opening-hint">A special day. A beautiful beginning.</p></div></div>
 <header class="site-header"><div class="brand">RAYRE <span style="font-weight:400">DIGITAL INVITATIONS</span></div><button type="button" id="musicButton" class="music" aria-pressed="false">♫ Music Off</button></header>
 <main id="mainContent"><section class="hero"><div class="hero-content"><div class="eyebrow">Together with their families</div><h1>Jeremy <span>&</span><br>Marjorie</h1><div class="line"></div><p style="letter-spacing:2px">JOYFULLY INVITE YOU TO THEIR WEDDING</p><p class="date">SATURDAY · FEBRUARY 27, 2027 · 3:00 PM</p><a class="btn" href="#rsvp">Kindly RSVP</a></div></section>
