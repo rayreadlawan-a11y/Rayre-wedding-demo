@@ -38,50 +38,6 @@
 
 <canvas id="fireworksCanvas" aria-hidden="true"></canvas>
 
-<script>
-(() => {
-  const canvas = document.getElementById('fireworksCanvas');
-  const ctx = canvas.getContext('2d');
-  const colors = ['#D4AF37', '#F8E7B9', '#FFFFFF', '#E8CFA0'];
-  let particles = [];
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
-
-  function burst(x, y) {
-    for (let i = 0; i < 65; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 1.5 + Math.random() * 4;
-
-      particles.push({
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        life: 75,
-        color: colors[Math.floor(Math.random() * colors.length)]
-      });
-    }
-  }
-
-  let animating = false;
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    particles = particles.filter(p => p.life > 0);
-
-    for (const p of particles) {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.025;
-      p.life--;
-
-</script>
 
 <div id="opening" role="dialog" aria-modal="true" aria-label="Open wedding invitation"><div class="open-inner"><div class="eyebrow">You are cordially invited</div><h2>To a celebration of love</h2><div class="envelope" id="envelope" aria-hidden="true"><div class="env-back"></div><div class="env-letter"><div>J <span style="color:#b49b6c">&</span> M<small>27 · 02 · 2027</small></div></div><div class="env-front"></div><div class="env-flap"></div><div class="wax">❦</div></div><button id="openInvitation" type="button">Open Invitation ✧</button><p class="opening-hint">A special day. A beautiful beginning.</p></div></div>
 <header class="site-header"><div class="brand">RAYRE <span style="font-weight:400">DIGITAL INVITATIONS</span></div><button type="button" id="musicButton" class="music" aria-pressed="false">♫ Music Off</button></header>
@@ -154,10 +110,51 @@ window.addEventListener('wheel', stopAutoScroll, { passive: true });
 window.addEventListener('touchstart', stopAutoScroll, { passive: true });
 document.querySelectorAll('#gallery img').forEach(img=>img.addEventListener('click',()=>{document.getElementById('lightboxImage').src=img.src;lightbox.classList.add('open')}));function closeLightbox(){lightbox.classList.remove('open')}document.getElementById('closeLightbox').addEventListener('click',closeLightbox);lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
 </script>
-      ctx.globalAlpha = p.life / 75;
+
+<script>
+(() => {
+  const canvas = document.getElementById('fireworksCanvas');
+  const ctx = canvas.getContext('2d');
+  const colors = ['#D4AF37', '#F8E7B9', '#FFFFFF', '#E8CFA0'];
+  let particles = [];
+  let animating = false;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function burst(x, y) {
+    for (let i = 0; i < 80; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 5;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 85,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.life > 0);
+
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.025;
+      p.life--;
+
+      ctx.globalAlpha = p.life / 85;
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -171,8 +168,6 @@ document.querySelectorAll('#gallery img').forEach(img=>img.addEventListener('cli
   }
 
   function launchFireworks() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
     const positions = [
       [0.25, 0.3],
       [0.75, 0.25],
@@ -184,7 +179,6 @@ document.querySelectorAll('#gallery img').forEach(img=>img.addEventListener('cli
     positions.forEach(([x, y], i) => {
       setTimeout(() => {
         burst(canvas.width * x, canvas.height * y);
-
         if (!animating) {
           animating = true;
           animate();
