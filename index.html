@@ -102,6 +102,7 @@
   background: #edf0e7;
   border-radius: 0;
 }
+} 
 </style></head><body>
 <style>
 #fireworksCanvas {
@@ -137,15 +138,24 @@
 <section class="section alt"><div class="eyebrow">Our special day</div><h2>Wedding Timeline</h2><div class="schedule"><div class="schedule-item"><strong>3:00 PM — Wedding Ceremony</strong><span>Join us as we exchange our vows</span></div><div class="schedule-item"><strong>After the Ceremony — Photo Moments</strong><span>Memories with family and friends</span></div><div class="schedule-item"><strong>Reception — To Be Confirmed</strong><span>Dining, celebration, and dancing</span></div></div><p class="note">Illustrative timeline; update once the couple confirms the program.</p></section>
 <section class="section"><div class="eyebrow">Memories we treasure</div><h2>Our Moments</h2><div class="ornament">❦</div>
 <div class="moments-slider" id="momentsSlider">
+<div class="moments-slider" id="momentsSlider">
   <div class="moments-track" id="momentsTrack">
-    <!-- Ilagay dito ang existing 10 img tags -->
+    <img src="received_1737920337620567.jpeg" alt="Couple photo 1">
+    <img src="received_895056010185422.jpeg" alt="Couple photo 2">
+    <img src="received_1251803299735117.jpeg" alt="Couple photo 3">
+    <img src="received_1618658842469191.jpeg" alt="Couple photo 4">
+    <img src="received_2798932233776762.jpeg" alt="Couple photo 5">
+    <img src="received_942881912025183.jpeg" alt="Couple photo 6">
+    <img src="received_1791709241517842.jpeg" alt="Couple photo 7">
+    <img src="received_1151743400231835.jpeg" alt="Couple photo 8">
+    <img src="received_1227661062279041.jpeg" alt="Couple photo 9">
+    <img src="received_1177079207832954.jpeg" alt="Couple photo 10">
   </div>
-  <button type="button" class="moments-prev"
-    id="momentsPrev" aria-label="Previous photo">❮</button>
-  <button type="button" class="moments-next"
-    id="momentsNext" aria-label="Next photo">❯</button>
-</div>
-<img loading="lazy" src="received_1737920337620567.jpeg" alt="Couple photo 1"><img loading="lazy" src="received_895056010185422.jpeg" alt="Couple photo 2"><img loading="lazy" src="received_1251803299735117.jpeg" alt="Couple photo 3"><img loading="lazy" src="received_1618658842469191.jpeg" alt="Couple photo 4"><img loading="lazy" src="received_2798932233776762.jpeg" alt="Couple photo 5"><img loading="lazy" src="received_942881912025183.jpeg" alt="Couple photo 6"><img loading="lazy" src="received_1791709241517842.jpeg" alt="Couple photo 7"><img loading="lazy" src="received_1151743400231835.jpeg" alt="Couple photo 8"><img loading="lazy" src="received_1227661062279041.jpeg" alt="Couple photo 9"><img loading="lazy" src="received_1177079207832954.jpeg" alt="Couple photo 10"></div><p class="note">Tap a photo to view it larger.</p></section>
+
+  <button type="button" class="moments-prev" id="momentsPrev" aria-label="Previous photo">❮</button>
+  <button type="button" class="moments-next" id="momentsNext" aria-label="Next photo">❯</button>
+</div><p class="note">Swipe left or right to view our memories.</p>
+</section>
 <section class="section alt botanical"><div class="eyebrow">Celebrate in style</div><h2>Dress Code</h2><p>We would love to see you in elegant formal attire in shades of green.</p><div class="swatches"><div class="swatch"><i style="background:#A3B18A"></i>Sage</div><div class="swatch"><i style="background:#777D43"></i>Olive</div><div class="swatch"><i style="background:#087F5B"></i>Emerald</div><div class="swatch"><i style="background:#285943"></i>Forest</div><div class="swatch"><i style="background:#244735"></i>Hunter</div></div><p class="note">Any elegant shade of green is welcome.</p></section>
 <section class="section"><div class="eyebrow">A little guidance</div><h2>Wedding Notes</h2><div class="faq"><details><summary>Where is the wedding?</summary><p>The current venue listed is Alora Countryside Garden. Please confirm the final location with the couple.</p></details><details><summary>What should I wear?</summary><p>Formal or semi-formal attire in any shade of green.</p></details><details><summary>How do I confirm my attendance?</summary><p>Complete the RSVP form below. Your response goes directly to the event organizer.</p></details></div></section>
 <section class="section alt botanical" id="rsvp"><div class="eyebrow">The favor of a reply</div><h2>Kindly RSVP</h2><p>Your presence would mean so much to us. Please let us know if you can join our celebration.</p><form class="rsvp-form" id="rsvpForm"><label for="guestName">Full name *</label><input id="guestName" name="guestName" maxlength="100" autocomplete="name" required placeholder="Your full name"><label for="attendance">Will you attend? *</label><select id="attendance" name="attendance" required><option value="">Select response</option><option value="Yes">Joyfully accepts</option><option value="No">Regretfully declines</option></select><label for="guestCount">Number of guests (including you) *</label><input id="guestCount" name="guestCount" type="number" min="1" max="10" value="1" required><label for="message">Message for the couple (optional)</label><textarea id="message" name="message" maxlength="500" placeholder="Your warm wishes..."></textarea><button type="submit">Send My RSVP</button><p class="note" id="rsvpHint">Your response will be submitted to the event organizer.</p><p id="rsvpStatus" role="status" aria-live="polite"></p></form></section></main>
