@@ -24,6 +24,39 @@
 .rsvp-form{box-shadow:0 14px 48px #334c3a10}.btn,button{transition:background .2s,transform .2s}.btn:hover,button:hover{background:#526d55}
 @media(max-width:680px){.hero{min-height:100svh;padding:110px 20px 65px;background-position:center,47% center}.hero-content{max-width:380px}.hero h1{font-size:clamp(60px,14.2vw,82px);line-height:.88}.hero .date{font-size:10px;letter-spacing:1.2px}.hero .eyebrow{font-size:9px;letter-spacing:2px}.hero-content>p{font-size:12px;letter-spacing:1.4px!important}.site-header{align-items:flex-start}.brand{max-width:155px;line-height:1.6}.music{font-size:9px;padding:9px 10px;letter-spacing:1px}.gallery img,.gallery img:nth-child(4n+2){height:clamp(170px,52vw,245px)}.section{padding:74px 20px}.section h2{font-size:clamp(47px,12vw,64px)}.rsvp-form{padding:25px 20px}}
 @media(max-width:360px){.hero h1{font-size:55px}.hero .date{letter-spacing:.5px}}
+/* OUR LOVE STORY SLIDESHOW */
+.story-slider {
+  width: 100%;
+  height: 540px;
+  overflow: hidden;
+  border-radius: 180px 180px 3px 3px;
+}
+.story-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  animation: storySlide 16s infinite;
+}
+.story-track img {
+  width: 100%;
+  height: 100%;
+  flex: 0 0 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+@keyframes storySlide {
+  0%, 20% { transform: translateX(0); }
+  25%, 45% { transform: translateX(-100%); }
+  50%, 70% { transform: translateX(-200%); }
+  75%, 95% { transform: translateX(-300%); }
+  100% { transform: translateX(0); }
+}
+@media(max-width:680px) {
+  .story-slider { height: 440px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .story-track { animation: none; }
+}
 </style></head><body>
 <style>
 #fireworksCanvas {
@@ -43,7 +76,16 @@
 <header class="site-header"><div class="brand">RAYRE <span style="font-weight:400">DIGITAL INVITATIONS</span></div><button type="button" id="musicButton" class="music" aria-pressed="false">♫ Music Off</button></header>
 <main id="mainContent"><section class="hero"><div class="hero-content"><div class="eyebrow">Together with their families</div><h1>Jeremy <span>&</span><br>Marjorie</h1><div class="line"></div><p style="letter-spacing:2px">JOYFULLY INVITE YOU TO THEIR WEDDING</p><p class="date">SATURDAY · FEBRUARY 27, 2027 · 3:00 PM</p><a class="btn" href="#rsvp">Kindly RSVP</a></div></section>
 <section class="section botanical"><div class="eyebrow">The beginning of forever</div><h2>Our Forever Begins</h2><div class="ornament">❦</div><p>With grateful hearts and the love of our families, we invite you to witness our vows and share in a celebration of love, laughter, and beautiful memories.</p><div class="countdown" aria-label="Wedding countdown"><div><strong id="days">—</strong><small>DAYS</small></div><div><strong id="hours">—</strong><small>HOURS</small></div><div><strong id="minutes">—</strong><small>MINUTES</small></div><div><strong id="seconds">—</strong><small>SECONDS</small></div></div><p id="countdownMessage" class="note">Counting down to our special day</p></section>
-<section class="section alt"><div class="eyebrow">The story of us</div><h2>Our Love Story</h2><div class="story"><img src="received_2306055253229804.jpeg" loading="lazy" alt="Jeremy and Marjorie together"><div class="story-copy"><div class="ornament">❦</div><h3>Every love story is beautiful</h3><p>Ours is filled with laughter, adventures, and precious moments that brought us closer together. Every chapter led us to this beautiful promise of forever.</p><p class="serif" style="font-size:34px;color:var(--sage)">Jeremy & Marjorie</p></div></div></section>
+<section class="section alt"><div class="eyebrow">The story of us</div><h2>Our Love Story</h2><div class="story">
+<div class="story-slider">
+  <div class="story-track">
+    <img src="received_2306055253229804.jpeg" alt="Our Story 1">
+    <img src="story2.jpg" alt="Our Story 2">
+    <img src="story3.jpg" alt="Our Story 3">
+    <img src="story4.jpg" alt="Our Story 4">
+  </div>
+</div>
+<div class="story-copy"><div class="ornament">❦</div><h3>Every love story is beautiful</h3><p>Ours is filled with laughter, adventures, and precious moments that brought us closer together. Every chapter led us to this beautiful promise of forever.</p><p class="serif" style="font-size:34px;color:var(--sage)">Jeremy & Marjorie</p></div></div></section>
 <section class="section botanical"><div class="eyebrow">Save the date</div><h2>Wedding Details</h2><div class="details"><article class="detail"><div class="ornament">✧</div><h3>The Wedding</h3><p><strong>Saturday, February 27, 2027</strong><br>3:00 in the afternoon<br>Alora Countryside Garden</p><a class="btn outline" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=Alora+Countryside+Garden">View Map</a></article><article class="detail"><div class="ornament">✧</div><h3>Celebrate With Us</h3><p>We look forward to celebrating this special moment with you and creating unforgettable memories together.</p><a class="btn outline" href="#rsvp">Confirm Attendance</a></article></div><p class="note">Please confirm the final ceremony and reception details before sharing with guests.</p></section>
 <section class="section alt"><div class="eyebrow">Our special day</div><h2>Wedding Timeline</h2><div class="schedule"><div class="schedule-item"><strong>3:00 PM — Wedding Ceremony</strong><span>Join us as we exchange our vows</span></div><div class="schedule-item"><strong>After the Ceremony — Photo Moments</strong><span>Memories with family and friends</span></div><div class="schedule-item"><strong>Reception — To Be Confirmed</strong><span>Dining, celebration, and dancing</span></div></div><p class="note">Illustrative timeline; update once the couple confirms the program.</p></section>
 <section class="section"><div class="eyebrow">Memories we treasure</div><h2>Our Moments</h2><div class="ornament">❦</div><div class="gallery" id="gallery"><img loading="lazy" src="received_1737920337620567.jpeg" alt="Couple photo 1"><img loading="lazy" src="received_895056010185422.jpeg" alt="Couple photo 2"><img loading="lazy" src="received_1251803299735117.jpeg" alt="Couple photo 3"><img loading="lazy" src="received_1618658842469191.jpeg" alt="Couple photo 4"><img loading="lazy" src="received_2798932233776762.jpeg" alt="Couple photo 5"><img loading="lazy" src="received_942881912025183.jpeg" alt="Couple photo 6"><img loading="lazy" src="received_1791709241517842.jpeg" alt="Couple photo 7"><img loading="lazy" src="received_1151743400231835.jpeg" alt="Couple photo 8"><img loading="lazy" src="received_1227661062279041.jpeg" alt="Couple photo 9"><img loading="lazy" src="received_1177079207832954.jpeg" alt="Couple photo 10"></div><p class="note">Tap a photo to view it larger.</p></section>
