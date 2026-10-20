@@ -107,6 +107,81 @@
   border-radius: 0;
 }
 } 
+
+/* RAYRE — FLORAL LACE SAGE & IVORY THEME */
+
+:root {
+  --sage: #91a58c;
+  --deep: #405843;
+  --cream: #fffdf8;
+  --ivory: #fffefb;
+  --gold: #b49b6c;
+}
+
+/* Delicate floral lace section borders */
+.section {
+  position: relative;
+  background-image:
+    radial-gradient(circle, #91a58c16 1px, transparent 2px);
+  background-size: 24px 24px;
+}
+
+.section.alt {
+  background-color: #edf0e7;
+}
+
+.section::before,
+.section::after {
+  content: "❀ ❦ ❀";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #91a58c80;
+  font: 24px Georgia, serif;
+  letter-spacing: 12px;
+  pointer-events: none;
+}
+
+.section::before { top: 17px; }
+.section::after { bottom: 17px; }
+
+/* Romantic lace-inspired photo frames */
+.story-slider,
+.moments-slider {
+  border: 7px double #d8dfd1;
+  box-shadow:
+    0 0 0 4px #fffdf8,
+    0 12px 35px #40584316;
+}
+
+/* Elegant wedding detail cards */
+.detail,
+.rsvp-form {
+  border: 2px solid #cbd8c5;
+  outline: 1px solid #e8dcc5;
+  outline-offset: -10px;
+  background-color: #fffefb;
+}
+
+/* Soft sage green buttons */
+.btn,
+button {
+  border-radius: 5px;
+}
+
+/* Lace-inspired opening envelope */
+.env-letter {
+  border: 3px double #b49b6c;
+  background:
+    radial-gradient(circle at center,
+      #ffffff 50%, #f0f3e9 100%);
+}
+
+.wax {
+  box-shadow:
+    inset 0 0 0 3px #cbb88f,
+    0 2px 10px #40584333;
+}
 </style></head><body>
 <style>
 #fireworksCanvas {
